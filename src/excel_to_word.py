@@ -5,12 +5,13 @@ from docx.shared import Pt, Inches
 from docx.oxml import OxmlElement, ns
 
 # ---------------- CONFIG ----------------
-EXCEL_PATH = "data/input.xlsx"
+EXCEL_PATH = "data/input_1.xlsx"
 SHEET_NAME = "Sheet1"
 OUTPUT_PATH = "output/output.docx"
 
 # ---------------- LOAD EXCEL ----------------
 df = pd.read_excel(EXCEL_PATH, sheet_name=SHEET_NAME)
+df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
 df = df.fillna("")  # blanks stay blanks
 
 # ---------------- CREATE DOCUMENT ----------------
@@ -80,7 +81,7 @@ add_page_border(section)
 for idx, row in df.iterrows():
 
     # EXACT school name from THIS Excel row
-    school_name = row.get("Name of School", "")
+    school_name = row.get("School Name", "")
 
     # SINGLE BODY HEADING (NO DUPLICATE)
     p = document.add_paragraph(f"School Name – {school_name}")
